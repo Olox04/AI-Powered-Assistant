@@ -9,38 +9,134 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as OrdersRouteImport } from './routes/orders'
+import { Route as MenuRouteImport } from './routes/menu'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as AiResearchRouteImport } from './routes/ai.research'
+import { Route as AiEmailRouteImport } from './routes/ai.email'
+import { Route as AiChatbotRouteImport } from './routes/ai.chatbot'
 
+const OrdersRoute = OrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MenuRoute = MenuRouteImport.update({
+  id: '/menu',
+  path: '/menu',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiResearchRoute = AiResearchRouteImport.update({
+  id: '/ai/research',
+  path: '/ai/research',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiEmailRoute = AiEmailRouteImport.update({
+  id: '/ai/email',
+  path: '/ai/email',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiChatbotRoute = AiChatbotRouteImport.update({
+  id: '/ai/chatbot',
+  path: '/ai/chatbot',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/menu': typeof MenuRoute
+  '/orders': typeof OrdersRoute
+  '/ai/chatbot': typeof AiChatbotRoute
+  '/ai/email': typeof AiEmailRoute
+  '/ai/research': typeof AiResearchRoute
+  '/api/chat': typeof ApiChatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/menu': typeof MenuRoute
+  '/orders': typeof OrdersRoute
+  '/ai/chatbot': typeof AiChatbotRoute
+  '/ai/email': typeof AiEmailRoute
+  '/ai/research': typeof AiResearchRoute
+  '/api/chat': typeof ApiChatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/menu': typeof MenuRoute
+  '/orders': typeof OrdersRoute
+  '/ai/chatbot': typeof AiChatbotRoute
+  '/ai/email': typeof AiEmailRoute
+  '/ai/research': typeof AiResearchRoute
+  '/api/chat': typeof ApiChatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/menu'
+    | '/orders'
+    | '/ai/chatbot'
+    | '/ai/email'
+    | '/ai/research'
+    | '/api/chat'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/menu'
+    | '/orders'
+    | '/ai/chatbot'
+    | '/ai/email'
+    | '/ai/research'
+    | '/api/chat'
+  id:
+    | '__root__'
+    | '/'
+    | '/menu'
+    | '/orders'
+    | '/ai/chatbot'
+    | '/ai/email'
+    | '/ai/research'
+    | '/api/chat'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  MenuRoute: typeof MenuRoute
+  OrdersRoute: typeof OrdersRoute
+  AiChatbotRoute: typeof AiChatbotRoute
+  AiEmailRoute: typeof AiEmailRoute
+  AiResearchRoute: typeof AiResearchRoute
+  ApiChatRoute: typeof ApiChatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/orders': {
+      id: '/orders'
+      path: '/orders'
+      fullPath: '/orders'
+      preLoaderRoute: typeof OrdersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/menu': {
+      id: '/menu'
+      path: '/menu'
+      fullPath: '/menu'
+      preLoaderRoute: typeof MenuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +144,45 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai/research': {
+      id: '/ai/research'
+      path: '/ai/research'
+      fullPath: '/ai/research'
+      preLoaderRoute: typeof AiResearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai/email': {
+      id: '/ai/email'
+      path: '/ai/email'
+      fullPath: '/ai/email'
+      preLoaderRoute: typeof AiEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai/chatbot': {
+      id: '/ai/chatbot'
+      path: '/ai/chatbot'
+      fullPath: '/ai/chatbot'
+      preLoaderRoute: typeof AiChatbotRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  MenuRoute: MenuRoute,
+  OrdersRoute: OrdersRoute,
+  AiChatbotRoute: AiChatbotRoute,
+  AiEmailRoute: AiEmailRoute,
+  AiResearchRoute: AiResearchRoute,
+  ApiChatRoute: ApiChatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

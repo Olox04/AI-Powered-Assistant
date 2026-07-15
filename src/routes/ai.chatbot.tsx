@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport, type UIMessage } from "ai";
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { Send, Sparkles, Trash2, MessagesSquare, User } from "lucide-react";
@@ -22,16 +23,29 @@ const suggestions = [
   "Write an announcement for today's specials.",
 ];
 
+function messageText(m: UIMessage) {
+  return m.parts
+    .map((p) => (p.type === "text" ? p.text : ""))
+    .join("");
+}
+
 function ChatbotPage() {
-  const { messages, input, handleInputChange, handleSubmit, isLoading, setMessages, append } = useChat({
-    api: "/api/chat",
-  });
-  const [autoScroll] = useState(true);
+  const [transport] = useState(() => new DefaultChatTransport({ api: "/api/chat" }));
+  const { messages, sendMessage, status, setMessages } = useChat({ transport });
+  const [input, setInput] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
+  const isLoading = status === "submitted" || status === "streaming";
 
   useEffect(() => {
-    if (autoScroll) bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, autoScroll]);
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const send = (text: string) => {
+    const value = text.trim();
+    if (!value) return;
+    setInput("");
+    void sendMessage({ text: value });
+  };
 
   return (
     <div className="mx-auto flex h-[calc(100vh-4rem)] max-w-[1000px] flex-col p-4 md:p-8">
@@ -63,7 +77,7 @@ function ChatbotPage() {
                 {suggestions.map((s) => (
                   <button
                     key={s}
-                    onClick={() => append({ role: "user", content: s })}
+                    onClick={() => send(s)}
                     className="card-hover group rounded-2xl border border-border bg-background p-4 text-left text-sm transition"
                   >
                     <Sparkles className="mb-2 h-4 w-4 text-primary" />
@@ -74,30 +88,33 @@ function ChatbotPage() {
             </div>
           ) : (
             <div className="space-y-6">
-              {messages.map((m) => (
-                <div key={m.id} className={cn("flex gap-3", m.role === "user" ? "flex-row-reverse" : "")}>
-                  <div className={cn(
-                    "grid h-8 w-8 shrink-0 place-items-center rounded-full",
-                    m.role === "user" ? "bg-secondary text-white" : "bg-primary text-primary-foreground",
-                  )}>
-                    {m.role === "user" ? <User className="h-4 w-4" /> : <Sparkles className="h-4 w-4" />}
+              {messages.map((m) => {
+                const text = messageText(m);
+                return (
+                  <div key={m.id} className={cn("flex gap-3", m.role === "user" ? "flex-row-reverse" : "")}>
+                    <div className={cn(
+                      "grid h-8 w-8 shrink-0 place-items-center rounded-full",
+                      m.role === "user" ? "bg-secondary text-white" : "bg-primary text-primary-foreground",
+                    )}>
+                      {m.role === "user" ? <User className="h-4 w-4" /> : <Sparkles className="h-4 w-4" />}
+                    </div>
+                    <div className={cn(
+                      "max-w-[80%] rounded-2xl px-4 py-3 text-sm",
+                      m.role === "user"
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-foreground",
+                    )}>
+                      {m.role === "user" ? (
+                        <p className="whitespace-pre-wrap">{text}</p>
+                      ) : (
+                        <div className="prose prose-sm max-w-none prose-p:my-1 prose-ul:my-2 prose-headings:mt-3 prose-headings:mb-1 prose-strong:text-foreground">
+                          <ReactMarkdown>{text}</ReactMarkdown>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div className={cn(
-                    "max-w-[80%] rounded-2xl px-4 py-3 text-sm",
-                    m.role === "user"
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted text-foreground",
-                  )}>
-                    {m.role === "user" ? (
-                      <p className="whitespace-pre-wrap">{m.content}</p>
-                    ) : (
-                      <div className="prose prose-sm max-w-none prose-p:my-1 prose-ul:my-2 prose-headings:mt-3 prose-headings:mb-1 prose-strong:text-foreground">
-                        <ReactMarkdown>{m.content}</ReactMarkdown>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
               {isLoading && messages[messages.length - 1]?.role === "user" && (
                 <div className="flex gap-3">
                   <div className="grid h-8 w-8 place-items-center rounded-full bg-primary text-primary-foreground">
@@ -117,11 +134,17 @@ function ChatbotPage() {
           )}
         </div>
 
-        <form onSubmit={handleSubmit} className="border-t border-border bg-background/50 p-3 backdrop-blur">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            send(input);
+          }}
+          className="border-t border-border bg-background/50 p-3 backdrop-blur"
+        >
           <div className="flex items-end gap-2 rounded-2xl border border-border bg-card p-2 focus-within:border-primary">
             <input
               value={input}
-              onChange={handleInputChange}
+              onChange={(e) => setInput(e.target.value)}
               placeholder="Ask anything about your restaurant…"
               className="flex-1 bg-transparent px-3 py-2 text-sm outline-none"
               autoFocus
