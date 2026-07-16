@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { useCart } from "@/lib/cart-store";
 
 export const Route = createFileRoute("/menu")({
   head: () => ({ meta: [{ title: "Menu — Skhura's Eatery" }] }),
@@ -17,6 +18,7 @@ function MenuPage() {
   const [query, setQuery] = useState("");
   const [favs, setFavs] = useState<Set<string>>(new Set());
   const [onlyAvailable, setOnlyAvailable] = useState(false);
+  const { add } = useCart();
 
   const filtered = useMemo(() => {
     return foods.filter((f) => {
@@ -146,7 +148,10 @@ function MenuPage() {
                     <Button
                       className="mt-4 w-full rounded-xl"
                       disabled={!f.available}
-                      onClick={() => toast.success(`${f.name} added to cart`)}
+                      onClick={() => {
+                        add(f);
+                        toast.success(`${f.name} added to cart`);
+                      }}
                     >
                       <Plus className="mr-1.5 h-4 w-4" /> Add to Cart
                     </Button>
