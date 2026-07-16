@@ -10,6 +10,7 @@ import {
   Menu as MenuIcon,
   Bell,
   Search,
+  ShoppingCart,
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
@@ -17,10 +18,12 @@ import logo from "@/assets/logo.png";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useCart } from "@/lib/cart-store";
 
 const mainNav = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
   { to: "/menu", label: "Menu", icon: UtensilsCrossed },
+  { to: "/cart", label: "Cart", icon: ShoppingCart },
   { to: "/orders", label: "Orders", icon: Receipt },
 ];
 
@@ -110,6 +113,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
 
 export function AppShell({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
+  const { count } = useCart();
 
   return (
     <div className="flex min-h-screen w-full bg-background">
@@ -141,6 +145,18 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
 
           <div className="ml-auto flex items-center gap-2">
+            <Link
+              to="/cart"
+              className="relative grid h-10 w-10 place-items-center rounded-full hover:bg-muted"
+              aria-label="Cart"
+            >
+              <ShoppingCart className="h-5 w-5" />
+              {count > 0 && (
+                <span className="absolute -right-0.5 -top-0.5 grid h-5 min-w-5 place-items-center rounded-full bg-primary px-1 text-[10px] font-black text-primary-foreground">
+                  {count}
+                </span>
+              )}
+            </Link>
             <Button variant="ghost" size="icon" className="relative rounded-full">
               <Bell className="h-5 w-5" />
               <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-primary" />
