@@ -1,128 +1,98 @@
-# Skhura's Eatery Web Application
+# Skhura's Eatery
+
+> **BAKING THE WORLD NEW CLASSICS**
 
 ## Project Overview
 
-Skhura's Eatery is a web-based food ordering application developed to modernize the restaurant's ordering process. The application allows customers to browse the menu, add items to a shopping cart, and place orders online instead of visiting the restaurant to order in person.
+Skhura's Eatery is a modern, responsive web application developed to improve the restaurant's ordering process. Instead of customers having to visit the restaurant and wait long periods for their food, the application allows them to browse the menu, add items to a shopping cart, and place orders online.
 
-The goal of the project is to improve customer convenience, reduce waiting times, and increase operational efficiency for the restaurant.
-
----
-
-## Objectives
-
-- Develop an easy-to-use online food ordering system.
-- Allow customers to browse available meals.
-- Enable customers to place orders online.
-- Improve customer experience through a responsive interface.
-- Reduce queues and manual ordering.
+The application also integrates AI-powered tools to assist with business communication, research, and customer support, creating a smarter and more efficient restaurant management experience.
 
 ---
 
 ## Features
 
-### Customer Features
+### Restaurant Features
+- Modern dashboard
+- Responsive user interface
+- Browse food categories
+- Search menu items
+- Shopping cart
+- Online food ordering
+- Order management
+- Featured promotions
 
-- Home page
-- Food categories
-- Search food items
-- Product details
-- Add to Cart
-- Update Cart Quantity
-- Remove Items from Cart
-- Checkout Page
-- Order Confirmation
-- Responsive Design
-
-### Menu Categories
-
+### Food Categories
 - Burgers
-- Anagwinya (Vetkoek)
+- Amagwinya
 - Hot Chips
 - Combos
-- Beef Meals
-- Pork Meals
-- Chicken Meals
+- Beef
+- Pork
+- Chicken
 - Russian Parcel
 - Chip Roll
-- Sandwiches
-- Cold Drinks
+- Sandwich
+
+### AI Features
+- **Smart Email Generator**
+  - Generate professional emails
+  - Multiple writing tones (Formal, Friendly, Persuasive, Professional)
+
+- **AI Research Assistant**
+  - Summarize topics
+  - Generate key points
+  - Provide insights
+  - Offer recommendations
+
+- **AI Chatbot**
+  - Interactive AI assistant
+  - Answer user questions
+  - Provide restaurant assistance
+  - Generate ideas and recommendations
 
 ---
 
-## Technologies Used
+## Tools Used
 
-### Frontend
-
-- React.js
-- Vite
-- HTML5
-- CSS3
-- JavaScript (ES6)
-
-### Development Tools
-
-- Visual Studio Code
-- Git
+- Lovable AI
+- React
+- TypeScript
+- Tailwind CSS
+- OpenAI API
 - GitHub
-- Loveable AI
-
+  
 ---
 
-## Project Structure
+## Setup Instructions
 
-```
-Skhuras-Eatery/
-│
-├── public/
-│
-├── src/
-│   ├── assets/
-│   ├── components/
-│   ├── pages/
-│   │   ├── Home.jsx
-│   │   ├── Menu.jsx
-│   │   ├── Cart.jsx
-│   │   ├── Checkout.jsx
-│   │   └── Confirmation.jsx
-│   │
-│   ├── services/
-│   ├── App.jsx
-│   └── main.jsx
-│
-├── package.json
-├── vite.config.js
-└── README.md
-```
-
----
-
-## Installation
-
-### Clone the Repository
+### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/skhuras-eatery.git
+git clone https://github.com/your-username/skhuras-eatery.git
 ```
 
-### Navigate into the Project
+### 2. Navigate to the Project Folder
 
 ```bash
 cd skhuras-eatery
 ```
 
-### Install Dependencies
+### 3. Install Dependencies
 
 ```bash
 npm install
 ```
 
-### Start the Development Server
+### 4. Start the Development Server
 
 ```bash
 npm run dev
 ```
 
-The application will be available at:
+### 5. Open the Application
+
+Open your browser and navigate to:
 
 ```
 http://localhost:5173
@@ -130,85 +100,61 @@ http://localhost:5173
 
 ---
 
-## Build for Production
+## Project Structure
 
-```bash
-npm run build
+```
+src/
+│
+├── components/
+├── pages/
+│   ├── Dashboard
+│   ├── Menu
+│   ├── Orders
+│   └── AI Tools
+│
+├── hooks/
+├── services/
+├── assets/
+├── utils/
+└── App.tsx
 ```
 
 ---
 
-## Run Preview
+## Responsive Design
 
-```bash
-npm run preview
-```
+The application is fully responsive and optimized for:
 
----
-
-## Application Workflow
-
-1. User visits the homepage.
-2. User browses available food categories.
-3. User selects food items.
-4. User adds items to the cart.
-5. User reviews the cart.
-6. User proceeds to checkout.
-7. User confirms the order.
-8. Order confirmation page is displayed.
+- Desktop
+- Tablet
+- Mobile Devices
 
 ---
 
-## Challenges Encountered
+## AI Disclaimer
 
-- Shopping cart functionality was initially not working correctly.
-- Cart page was missing.
-- Managing application state across pages.
-- Organizing reusable components.
-
----
-
-## Solutions Implemented
-
-- Developed a dedicated Cart page.
-- Implemented state management for cart items.
-- Created reusable React components.
-- Improved navigation between pages.
-- Tested ordering workflow from menu to checkout.
+The AI-powered features are designed to assist users by generating emails, summaries, recommendations, and chatbot responses. AI-generated content may contain inaccuracies and should always be reviewed before being used for business or customer communication.
 
 ---
 
 ## Future Improvements
 
-- User Registration and Login
-- Online Payments
-- Order Tracking
-- Admin Dashboard
-- Inventory Management
-- Customer Reviews
-- Loyalty Rewards Program
-- Delivery Tracking
-- Push Notifications
-- Sales Reporting
+- Customer accounts
+- Online payments
+- Order tracking
+- Delivery management
+- Restaurant analytics
+- Inventory management
+- Customer reviews
+- Loyalty rewards
+- Push notifications
 
 ---
 
-## Testing
+## Developer
 
-The application was tested to ensure:
+**Project:** Skhura's Eatery Web Application
 
-- Navigation works correctly.
-- Menu items load successfully.
-- Cart updates correctly.
-- Checkout process completes successfully.
-- Responsive layout works on different screen sizes.
+**Developed for:** AI Assisntant Project
 
----
-
-## Author
-
-**Olwethu Tshingo**
-
-
-2026
----
+**Slogan:** **BAKING THE WORLD NEW CLASSICS**
