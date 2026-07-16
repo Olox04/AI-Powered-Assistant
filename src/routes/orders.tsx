@@ -1,22 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Clock, User } from "lucide-react";
-import { recentOrders, type Order } from "@/lib/menu-data";
+import { Clock, User, ArrowRight } from "lucide-react";
+import { type Order } from "@/lib/menu-data";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useCart } from "@/lib/cart-store";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/orders")({
   head: () => ({ meta: [{ title: "Orders — Skhura's Eatery" }] }),
   component: OrdersPage,
 });
-
-const extendedOrders: Order[] = [
-  ...recentOrders,
-  { id: "#4813", customer: "Zinhle O.", items: ["Chicken Wings 8pc"], total: 79, status: "preparing", time: "32m ago" },
-  { id: "#4812", customer: "Bongani S.", items: ["Beef Grill Plate"], total: 129, status: "ready", time: "35m ago" },
-  { id: "#4811", customer: "Refilwe M.", items: ["Loaded Amagwinya x2"], total: 90, status: "completed", time: "40m ago" },
-  { id: "#4810", customer: "Katlego P.", items: ["Chip Roll Classic"], total: 35, status: "pending", time: "45m ago" },
-];
 
 const statusStyles: Record<Order["status"], string> = {
   completed: "bg-success/15 text-success",
@@ -32,13 +27,21 @@ const dotStyles: Record<Order["status"], string> = {
   pending: "bg-muted-foreground",
 };
 
+const nextLabel: Record<Order["status"], string | null> = {
+  pending: "Start preparing",
+  preparing: "Mark ready",
+  ready: "Complete",
+  completed: null,
+};
+
 function OrdersPage() {
+  const { orders, advanceStatus } = useCart();
   const [tab, setTab] = useState<"current" | Order["status"]>("current");
 
   const filtered = useMemo(() => {
-    if (tab === "current") return extendedOrders.filter((o) => o.status !== "completed");
-    return extendedOrders.filter((o) => o.status === tab);
-  }, [tab]);
+    if (tab === "current") return orders.filter((o) => o.status !== "completed");
+    return orders.filter((o) => o.status === tab);
+  }, [tab, orders]);
 
   return (
     <div className="mx-auto max-w-[1400px] p-4 md:p-8">
@@ -52,7 +55,7 @@ function OrdersPage() {
             <div key={s} className="rounded-2xl border border-border bg-card px-4 py-2 shadow-soft">
               <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{s}</div>
               <div className="text-lg font-black">
-                {extendedOrders.filter((o) => o.status === s).length}
+                {orders.filter((o) => o.status === s).length}
               </div>
             </div>
           ))}
@@ -74,40 +77,56 @@ function OrdersPage() {
             </div>
           ) : (
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {filtered.map((o) => (
-                <article key={o.id} className="card-hover rounded-2xl border border-border bg-card p-5 shadow-soft">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="grid h-10 w-10 place-items-center rounded-full bg-primary/10 text-primary">
-                        <User className="h-4 w-4" />
+              {filtered.map((o) => {
+                const action = nextLabel[o.status];
+                return (
+                  <article key={o.id} className="card-hover flex flex-col rounded-2xl border border-border bg-card p-5 shadow-soft">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="grid h-10 w-10 place-items-center rounded-full bg-primary/10 text-primary">
+                          <User className="h-4 w-4" />
+                        </div>
+                        <div>
+                          <div className="font-bold">{o.customer}</div>
+                          <div className="text-xs text-muted-foreground">Order {o.id}</div>
+                        </div>
                       </div>
-                      <div>
-                        <div className="font-bold">{o.customer}</div>
-                        <div className="text-xs text-muted-foreground">Order {o.id}</div>
+                      <span className={cn("inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase", statusStyles[o.status])}>
+                        <span className={cn("h-1.5 w-1.5 rounded-full", dotStyles[o.status])} />
+                        {o.status}
+                      </span>
+                    </div>
+
+                    <ul className="mt-4 space-y-1.5 text-sm">
+                      {o.items.map((it, i) => (
+                        <li key={i} className="flex items-center gap-2 text-muted-foreground">
+                          <span className="h-1 w-1 rounded-full bg-primary" /> {it}
+                        </li>
+                      ))}
+                    </ul>
+
+                    <div className="mt-auto flex items-center justify-between border-t border-border pt-4">
+                      <div className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                        <Clock className="h-3 w-3" /> {o.time}
                       </div>
+                      <div className="text-xl font-black">R{o.total}</div>
                     </div>
-                    <span className={cn("inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase", statusStyles[o.status])}>
-                      <span className={cn("h-1.5 w-1.5 rounded-full", dotStyles[o.status])} />
-                      {o.status}
-                    </span>
-                  </div>
 
-                  <ul className="mt-4 space-y-1.5 text-sm">
-                    {o.items.map((it, i) => (
-                      <li key={i} className="flex items-center gap-2 text-muted-foreground">
-                        <span className="h-1 w-1 rounded-full bg-primary" /> {it}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="mt-4 flex items-center justify-between border-t border-border pt-4">
-                    <div className="inline-flex items-center gap-1 text-xs text-muted-foreground">
-                      <Clock className="h-3 w-3" /> {o.time}
-                    </div>
-                    <div className="text-xl font-black">R{o.total}</div>
-                  </div>
-                </article>
-              ))}
+                    {action && (
+                      <Button
+                        size="sm"
+                        className="mt-3 w-full rounded-full"
+                        onClick={() => {
+                          advanceStatus(o.id);
+                          toast.success(`${o.id} → ${action.toLowerCase()}`);
+                        }}
+                      >
+                        {action} <ArrowRight className="ml-1 h-3.5 w-3.5" />
+                      </Button>
+                    )}
+                  </article>
+                );
+              })}
             </div>
           )}
         </TabsContent>
