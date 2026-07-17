@@ -113,7 +113,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
       let created: Order | null = null;
       setItems((currentItems) => {
         if (currentItems.length === 0) return currentItems;
-        const total = currentItems.reduce((s, i) => s + i.price * i.qty, 0);
+        const subtotal = currentItems.reduce((s, i) => s + i.price * i.qty, 0);
+        const serviceFee = 12;
+        const total = subtotal + serviceFee;
+        const now = Date.now();
         const order: Order = {
           id: `#${Math.floor(4900 + Math.random() * 1000)}`,
           customer: customer.trim() || "Walk-in",
@@ -121,6 +124,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
           total,
           status: "pending",
           time: "just now",
+          lineItems: currentItems.map((i) => ({
+            id: i.id,
+            name: i.name,
+            price: i.price,
+            qty: i.qty,
+          })),
+          subtotal,
+          serviceFee,
+          placedAt: now,
+          history: [{ status: "pending", at: now }],
         };
         created = order;
         setOrders((prev) => [order, ...prev]);
@@ -133,12 +146,24 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const advanceStatus = useCallback((id: string) => {
     setOrders((prev) =>
-      prev.map((o) => (o.id === id ? { ...o, status: nextStatus[o.status] } : o)),
+      prev.map((o) => {
+        if (o.id !== id) return o;
+        const next = nextStatus[o.status];
+        if (next === o.status) return o;
+        const history = [...(o.history ?? [{ status: o.status, at: Date.now() }]), { status: next, at: Date.now() }];
+        return { ...o, status: next, history };
+      }),
     );
   }, []);
 
   const setStatus = useCallback((id: string, status: Order["status"]) => {
-    setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status } : o)));
+    setOrders((prev) =>
+      prev.map((o) => {
+        if (o.id !== id) return o;
+        const history = [...(o.history ?? [{ status: o.status, at: Date.now() }]), { status, at: Date.now() }];
+        return { ...o, status, history };
+      }),
+    );
   }, []);
 
   const value = useMemo<CartContextValue>(() => {
