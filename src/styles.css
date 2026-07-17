@@ -150,3 +150,13 @@
     box-shadow: 0 20px 40px -20px oklch(0 0 0 / 0.15);
   }
 }
+
+/* Print styles — receipt-only output */
+@media print {
+  body { background: white !important; }
+  aside, nav, header, footer { }
+  /* Hide app shell chrome when printing */
+  [data-app-shell-chrome] { display: none !important; }
+  #printable-receipt { box-shadow: none !important; border: 0 !important; }
+  @page { margin: 16mm; }
+}

@@ -83,6 +83,18 @@ export const foods: FoodItem[] = [
   { id: "f20", name: "Skhura's Club", category: "sandwich", description: "Triple stack club sandwich.", price: 75, image: f20, available: true },
 ];
 
+export type OrderLineItem = {
+  id: string;
+  name: string;
+  price: number;
+  qty: number;
+};
+
+export type OrderStatusEvent = {
+  status: Order["status"];
+  at: number; // epoch ms
+};
+
 export type Order = {
   id: string;
   customer: string;
@@ -90,6 +102,12 @@ export type Order = {
   total: number;
   status: "pending" | "preparing" | "ready" | "completed";
   time: string;
+  // Extended fields (optional for backward-compatibility with seed data)
+  lineItems?: OrderLineItem[];
+  subtotal?: number;
+  serviceFee?: number;
+  placedAt?: number;
+  history?: OrderStatusEvent[];
 };
 
 export const recentOrders: Order[] = [
