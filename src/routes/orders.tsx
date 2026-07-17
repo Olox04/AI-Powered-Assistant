@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Clock, User, ArrowRight } from "lucide-react";
+import { Clock, User, ArrowRight, Receipt } from "lucide-react";
 import { type Order } from "@/lib/menu-data";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -112,18 +112,29 @@ function OrdersPage() {
                       <div className="text-xl font-black">R{o.total}</div>
                     </div>
 
-                    {action && (
-                      <Button
-                        size="sm"
-                        className="mt-3 w-full rounded-full"
-                        onClick={() => {
-                          advanceStatus(o.id);
-                          toast.success(`${o.id} → ${action.toLowerCase()}`);
-                        }}
+                    <div className="mt-3 flex gap-2">
+                      <Link
+                        to="/orders/$orderId"
+                        params={{ orderId: o.id.replace(/^#/, "") }}
+                        className="flex-1"
                       >
-                        {action} <ArrowRight className="ml-1 h-3.5 w-3.5" />
-                      </Button>
-                    )}
+                        <Button size="sm" variant="outline" className="w-full rounded-full">
+                          <Receipt className="mr-1 h-3.5 w-3.5" /> Receipt
+                        </Button>
+                      </Link>
+                      {action && (
+                        <Button
+                          size="sm"
+                          className="flex-1 rounded-full"
+                          onClick={() => {
+                            advanceStatus(o.id);
+                            toast.success(`${o.id} → ${action.toLowerCase()}`);
+                          }}
+                        >
+                          {action} <ArrowRight className="ml-1 h-3.5 w-3.5" />
+                        </Button>
+                      )}
+                    </div>
                   </article>
                 );
               })}
