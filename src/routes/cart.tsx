@@ -26,7 +26,8 @@ function CartPage() {
     }
     toast.success(`Order ${order.id} placed`);
     setCustomer("");
-    navigate({ to: "/orders" });
+    // Strip the leading "#" for the URL param
+    navigate({ to: "/orders/$orderId", params: { orderId: order.id.replace(/^#/, "") } });
   };
 
   return (
