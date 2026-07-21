@@ -264,14 +264,6 @@ function ReceiptPage() {
               <span className="text-xl font-black">R{order.total}</span>
             </div>
           </div>
-              <span className="text-muted-foreground">Service fee</span>
-              <span className="font-semibold">R{serviceFee}</span>
-            </div>
-            <div className="flex justify-between border-t border-border pt-2 text-base">
-              <span className="font-bold">Total</span>
-              <span className="text-xl font-black">R{order.total}</span>
-            </div>
-          </div>
 
           <footer className="mt-8 border-t border-dashed border-border pt-4 text-center text-[11px] text-muted-foreground">
             Thank you for eating with Skhura's — see you soon. · This receipt was generated for order {order.id}.
