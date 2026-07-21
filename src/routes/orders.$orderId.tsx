@@ -121,18 +121,38 @@ function ReceiptPage() {
                 Order
               </div>
               <div className="text-2xl font-black">{order.id}</div>
-              <span
-                className={cn(
-                  "mt-1 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider",
-                  order.status === "completed" && "bg-success/15 text-success",
-                  order.status === "preparing" && "bg-primary/15 text-primary",
-                  order.status === "ready" && "bg-info/15 text-info",
-                  order.status === "pending" && "bg-muted text-muted-foreground",
-                )}
-              >
-                <span className={cn("h-1.5 w-1.5 rounded-full", stageMeta[order.status].dot)} />
-                {order.status}
-              </span>
+              <div className="mt-1 flex flex-wrap justify-end gap-1.5">
+                <span
+                  className={cn(
+                    "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider",
+                    order.status === "completed" && "bg-success/15 text-success",
+                    order.status === "preparing" && "bg-primary/15 text-primary",
+                    order.status === "ready" && "bg-info/15 text-info",
+                    order.status === "pending" && "bg-muted text-muted-foreground",
+                  )}
+                >
+                  <span className={cn("h-1.5 w-1.5 rounded-full", stageMeta[order.status].dot)} />
+                  {order.status}
+                </span>
+                <span
+                  className={cn(
+                    "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider",
+                    order.paymentStatus === "paid" && "bg-success/15 text-success",
+                    order.paymentStatus === "refunded" && "bg-info/15 text-info",
+                    (!order.paymentStatus || order.paymentStatus === "unpaid") && "bg-destructive/10 text-destructive",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "h-1.5 w-1.5 rounded-full",
+                      order.paymentStatus === "paid" && "bg-success",
+                      order.paymentStatus === "refunded" && "bg-info",
+                      (!order.paymentStatus || order.paymentStatus === "unpaid") && "bg-destructive",
+                    )}
+                  />
+                  {order.paymentStatus ?? "unpaid"}
+                </span>
+              </div>
             </div>
           </header>
 
