@@ -1,13 +1,6 @@
-import burgers from "@/assets/cat-burgers.jpg";
-import amagwinya from "@/assets/cat-amagwinya.jpg";
-import chips from "@/assets/cat-chips.jpg";
-import combos from "@/assets/cat-combos.jpg";
-import beef from "@/assets/cat-beef.jpg";
-import pork from "@/assets/cat-pork.jpg";
-import chicken from "@/assets/cat-chicken.jpg";
-import russian from "@/assets/cat-russian.jpg";
-import chiproll from "@/assets/cat-chiproll.jpg";
-import sandwich from "@/assets/cat-sandwich.jpg";
+// Category thumbnails reuse the matching menu-item images so Popular
+// Categories on the dashboard visually correspond to the actual menu.
+
 import f1 from "@/assets/food-f1.jpg";
 import f2 from "@/assets/food-f2.jpg";
 import f3 from "@/assets/food-f3.jpg";
@@ -38,16 +31,16 @@ export type Category = {
 };
 
 export const categories: Category[] = [
-  { slug: "burgers", name: "Burgers", description: "Juicy stacked classics grilled to order.", startingPrice: 49, image: burgers },
-  { slug: "amagwinya", name: "Amagwinya", description: "Golden vetkoek, crisp outside, fluffy inside.", startingPrice: 12, image: amagwinya },
-  { slug: "hot-chips", name: "Hot Chips", description: "Crispy fries seasoned to perfection.", startingPrice: 25, image: chips },
-  { slug: "combos", name: "Combos", description: "Meal deals — burger, chips & drink.", startingPrice: 79, image: combos },
-  { slug: "beef", name: "Beef", description: "Grilled beef cuts, tender and smoky.", startingPrice: 89, image: beef },
-  { slug: "pork", name: "Pork", description: "Slow-grilled pork chops with herbs.", startingPrice: 85, image: pork },
-  { slug: "chicken", name: "Chicken", description: "Crispy fried chicken, house spice.", startingPrice: 59, image: chicken },
-  { slug: "russian-parcel", name: "Russian Parcel", description: "Russian sausage tucked with chips.", startingPrice: 45, image: russian },
-  { slug: "chip-roll", name: "Chip Roll", description: "Warm roll loaded with hot chips.", startingPrice: 35, image: chiproll },
-  { slug: "sandwich", name: "Sandwich", description: "Toasted classics stacked high.", startingPrice: 39, image: sandwich },
+  { slug: "burgers", name: "Burgers", description: "Juicy stacked classics grilled to order.", startingPrice: 65, image: f1 },
+  { slug: "amagwinya", name: "Amagwinya", description: "Golden vetkoek, crisp outside, fluffy inside.", startingPrice: 25, image: f3 },
+  { slug: "hot-chips", name: "Hot Chips", description: "Crispy fries seasoned to perfection.", startingPrice: 35, image: f5 },
+  { slug: "combos", name: "Combos", description: "Meal deals — burger, chips & drink.", startingPrice: 89, image: f7 },
+  { slug: "beef", name: "Beef", description: "Grilled beef cuts, tender and smoky.", startingPrice: 95, image: f9 },
+  { slug: "pork", name: "Pork", description: "Slow-grilled pork chops with herbs.", startingPrice: 99, image: f11 },
+  { slug: "chicken", name: "Chicken", description: "Crispy fried chicken, house spice.", startingPrice: 79, image: f13 },
+  { slug: "russian-parcel", name: "Russian Parcel", description: "Russian sausage tucked with chips.", startingPrice: 55, image: f15 },
+  { slug: "chip-roll", name: "Chip Roll", description: "Warm roll loaded with hot chips.", startingPrice: 35, image: f17 },
+  { slug: "sandwich", name: "Sandwich", description: "Toasted classics stacked high.", startingPrice: 49, image: f19 },
 ];
 
 export type FoodItem = {
