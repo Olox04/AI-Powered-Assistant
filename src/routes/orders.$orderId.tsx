@@ -156,7 +156,7 @@ function ReceiptPage() {
             </div>
           </header>
 
-          <dl className="mt-6 grid grid-cols-2 gap-4 text-sm sm:grid-cols-3">
+          <dl className="mt-6 grid grid-cols-2 gap-4 text-sm sm:grid-cols-4">
             <div>
               <dt className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                 Customer
@@ -182,6 +182,17 @@ function ReceiptPage() {
               </dt>
               <dd className="mt-0.5 font-semibold">
                 {order.lineItems?.reduce((s, i) => s + i.qty, 0) ?? order.items.length}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                Payment
+              </dt>
+              <dd className="mt-0.5 font-semibold capitalize">
+                {(order.paymentMethod ?? "cash").toUpperCase()}
+                <span className="ml-1 text-xs font-medium text-muted-foreground">
+                  ({order.paymentStatus ?? "unpaid"})
+                </span>
               </dd>
             </div>
           </dl>
