@@ -242,6 +242,31 @@ function ReceiptPage() {
               <span className="text-muted-foreground">Service fee</span>
               <span className="font-semibold">R{serviceFee}</span>
             </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Payment method</span>
+              <span className="font-semibold uppercase">{order.paymentMethod ?? "cash"}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Payment status</span>
+              <span
+                className={cn(
+                  "font-bold uppercase",
+                  order.paymentStatus === "paid" && "text-success",
+                  order.paymentStatus === "refunded" && "text-info",
+                  (!order.paymentStatus || order.paymentStatus === "unpaid") && "text-destructive",
+                )}
+              >
+                {order.paymentStatus ?? "unpaid"}
+              </span>
+            </div>
+            <div className="flex justify-between border-t border-border pt-2 text-base">
+              <span className="font-bold">Total</span>
+              <span className="text-xl font-black">R{order.total}</span>
+            </div>
+          </div>
+              <span className="text-muted-foreground">Service fee</span>
+              <span className="font-semibold">R{serviceFee}</span>
+            </div>
             <div className="flex justify-between border-t border-border pt-2 text-base">
               <span className="font-bold">Total</span>
               <span className="text-xl font-black">R{order.total}</span>
