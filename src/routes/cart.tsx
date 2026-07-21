@@ -134,6 +134,58 @@ function CartPage() {
                 />
               </div>
 
+              <div className="mt-4">
+                <label className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                  Payment method
+                </label>
+                <div className="mt-1.5 grid grid-cols-2 gap-2">
+                  {paymentOptions.map((p) => {
+                    const Icon = p.icon;
+                    const active = method === p.id;
+                    return (
+                      <button
+                        key={p.id}
+                        type="button"
+                        onClick={() => setMethod(p.id)}
+                        className={cn(
+                          "flex items-center gap-2 rounded-xl border px-3 py-2 text-sm font-semibold transition",
+                          active
+                            ? "border-primary bg-primary/10 text-primary"
+                            : "border-border bg-background hover:bg-muted",
+                        )}
+                      >
+                        <Icon className="h-4 w-4" /> {p.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <label className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                  Payment status
+                </label>
+                <div className="mt-1.5 inline-flex rounded-full border border-border p-1">
+                  {(["unpaid", "paid"] as PaymentStatus[]).map((s) => (
+                    <button
+                      key={s}
+                      type="button"
+                      onClick={() => setStatus(s)}
+                      className={cn(
+                        "rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition",
+                        status === s
+                          ? s === "paid"
+                            ? "bg-success text-success-foreground"
+                            : "bg-foreground text-background"
+                          : "text-muted-foreground hover:text-foreground",
+                      )}
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <dl className="mt-5 space-y-2 border-t border-border pt-4 text-sm">
                 <div className="flex justify-between">
                   <dt className="text-muted-foreground">Subtotal</dt>
