@@ -121,22 +121,42 @@ function ReceiptPage() {
                 Order
               </div>
               <div className="text-2xl font-black">{order.id}</div>
-              <span
-                className={cn(
-                  "mt-1 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider",
-                  order.status === "completed" && "bg-success/15 text-success",
-                  order.status === "preparing" && "bg-primary/15 text-primary",
-                  order.status === "ready" && "bg-info/15 text-info",
-                  order.status === "pending" && "bg-muted text-muted-foreground",
-                )}
-              >
-                <span className={cn("h-1.5 w-1.5 rounded-full", stageMeta[order.status].dot)} />
-                {order.status}
-              </span>
+              <div className="mt-1 flex flex-wrap justify-end gap-1.5">
+                <span
+                  className={cn(
+                    "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider",
+                    order.status === "completed" && "bg-success/15 text-success",
+                    order.status === "preparing" && "bg-primary/15 text-primary",
+                    order.status === "ready" && "bg-info/15 text-info",
+                    order.status === "pending" && "bg-muted text-muted-foreground",
+                  )}
+                >
+                  <span className={cn("h-1.5 w-1.5 rounded-full", stageMeta[order.status].dot)} />
+                  {order.status}
+                </span>
+                <span
+                  className={cn(
+                    "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider",
+                    order.paymentStatus === "paid" && "bg-success/15 text-success",
+                    order.paymentStatus === "refunded" && "bg-info/15 text-info",
+                    (!order.paymentStatus || order.paymentStatus === "unpaid") && "bg-destructive/10 text-destructive",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "h-1.5 w-1.5 rounded-full",
+                      order.paymentStatus === "paid" && "bg-success",
+                      order.paymentStatus === "refunded" && "bg-info",
+                      (!order.paymentStatus || order.paymentStatus === "unpaid") && "bg-destructive",
+                    )}
+                  />
+                  {order.paymentStatus ?? "unpaid"}
+                </span>
+              </div>
             </div>
           </header>
 
-          <dl className="mt-6 grid grid-cols-2 gap-4 text-sm sm:grid-cols-3">
+          <dl className="mt-6 grid grid-cols-2 gap-4 text-sm sm:grid-cols-4">
             <div>
               <dt className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                 Customer
@@ -162,6 +182,17 @@ function ReceiptPage() {
               </dt>
               <dd className="mt-0.5 font-semibold">
                 {order.lineItems?.reduce((s, i) => s + i.qty, 0) ?? order.items.length}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                Payment
+              </dt>
+              <dd className="mt-0.5 font-semibold capitalize">
+                {(order.paymentMethod ?? "cash").toUpperCase()}
+                <span className="ml-1 text-xs font-medium text-muted-foreground">
+                  ({order.paymentStatus ?? "unpaid"})
+                </span>
               </dd>
             </div>
           </dl>
@@ -210,6 +241,23 @@ function ReceiptPage() {
             <div className="flex justify-between">
               <span className="text-muted-foreground">Service fee</span>
               <span className="font-semibold">R{serviceFee}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Payment method</span>
+              <span className="font-semibold uppercase">{order.paymentMethod ?? "cash"}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Payment status</span>
+              <span
+                className={cn(
+                  "font-bold uppercase",
+                  order.paymentStatus === "paid" && "text-success",
+                  order.paymentStatus === "refunded" && "text-info",
+                  (!order.paymentStatus || order.paymentStatus === "unpaid") && "text-destructive",
+                )}
+              >
+                {order.paymentStatus ?? "unpaid"}
+              </span>
             </div>
             <div className="flex justify-between border-t border-border pt-2 text-base">
               <span className="font-bold">Total</span>

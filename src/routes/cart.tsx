@@ -1,8 +1,10 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Minus, Plus, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
+import { Minus, Plus, Trash2, ShoppingBag, ArrowRight, Wallet, CreditCard, Building2, Smartphone } from "lucide-react";
 import { useCart } from "@/lib/cart-store";
+import type { PaymentMethod, PaymentStatus } from "@/lib/menu-data";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/cart")({
@@ -10,23 +12,31 @@ export const Route = createFileRoute("/cart")({
   component: CartPage,
 });
 
+const paymentOptions: { id: PaymentMethod; label: string; icon: typeof Wallet }[] = [
+  { id: "cash", label: "Cash", icon: Wallet },
+  { id: "card", label: "Card", icon: CreditCard },
+  { id: "eft", label: "EFT", icon: Building2 },
+  { id: "snapscan", label: "SnapScan", icon: Smartphone },
+];
+
 function CartPage() {
   const { items, updateQty, remove, total, clear, placeOrder } = useCart();
   const [customer, setCustomer] = useState("");
+  const [method, setMethod] = useState<PaymentMethod>("cash");
+  const [status, setStatus] = useState<PaymentStatus>("unpaid");
   const navigate = useNavigate();
 
   const serviceFee = items.length > 0 ? 12 : 0;
   const grand = total + serviceFee;
 
   const checkout = () => {
-    const order = placeOrder(customer);
+    const order = placeOrder(customer, { method, status });
     if (!order) {
       toast.error("Your cart is empty");
       return;
     }
     toast.success(`Order ${order.id} placed`);
     setCustomer("");
-    // Strip the leading "#" for the URL param
     navigate({ to: "/orders/$orderId", params: { orderId: order.id.replace(/^#/, "") } });
   };
 
@@ -122,6 +132,58 @@ function CartPage() {
                   placeholder="e.g. Thabo M."
                   className="mt-1.5 h-11 w-full rounded-xl border border-border bg-background px-3 text-sm outline-none focus:border-primary"
                 />
+              </div>
+
+              <div className="mt-4">
+                <label className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                  Payment method
+                </label>
+                <div className="mt-1.5 grid grid-cols-2 gap-2">
+                  {paymentOptions.map((p) => {
+                    const Icon = p.icon;
+                    const active = method === p.id;
+                    return (
+                      <button
+                        key={p.id}
+                        type="button"
+                        onClick={() => setMethod(p.id)}
+                        className={cn(
+                          "flex items-center gap-2 rounded-xl border px-3 py-2 text-sm font-semibold transition",
+                          active
+                            ? "border-primary bg-primary/10 text-primary"
+                            : "border-border bg-background hover:bg-muted",
+                        )}
+                      >
+                        <Icon className="h-4 w-4" /> {p.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <label className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                  Payment status
+                </label>
+                <div className="mt-1.5 inline-flex rounded-full border border-border p-1">
+                  {(["unpaid", "paid"] as PaymentStatus[]).map((s) => (
+                    <button
+                      key={s}
+                      type="button"
+                      onClick={() => setStatus(s)}
+                      className={cn(
+                        "rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition",
+                        status === s
+                          ? s === "paid"
+                            ? "bg-success text-success-foreground"
+                            : "bg-foreground text-background"
+                          : "text-muted-foreground hover:text-foreground",
+                      )}
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <dl className="mt-5 space-y-2 border-t border-border pt-4 text-sm">
