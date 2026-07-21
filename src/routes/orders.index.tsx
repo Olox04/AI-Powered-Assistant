@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { useCart } from "@/lib/cart-store";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/orders")({
+export const Route = createFileRoute("/orders/")({
   head: () => ({ meta: [{ title: "Orders — Skhura's Eatery" }] }),
   component: OrdersPage,
 });

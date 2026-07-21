@@ -7,7 +7,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { recentOrders, type FoodItem, type Order } from "./menu-data";
+import { recentOrders, type FoodItem, type Order, type PaymentMethod, type PaymentStatus } from "./menu-data";
 
 export type CartItem = {
   id: string;
@@ -26,7 +26,7 @@ type CartContextValue = {
   updateQty: (id: string, qty: number) => void;
   clear: () => void;
   orders: Order[];
-  placeOrder: (customer: string) => Order | null;
+  placeOrder: (customer: string, payment?: { method: PaymentMethod; status: PaymentStatus }) => Order | null;
   advanceStatus: (id: string) => void;
   setStatus: (id: string, status: Order["status"]) => void;
 };
@@ -109,7 +109,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const clear = useCallback(() => setItems([]), []);
 
   const placeOrder = useCallback<CartContextValue["placeOrder"]>(
-    (customer) => {
+    (customer, payment) => {
       let created: Order | null = null;
       setItems((currentItems) => {
         if (currentItems.length === 0) return currentItems;
@@ -134,6 +134,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
           serviceFee,
           placedAt: now,
           history: [{ status: "pending", at: now }],
+          paymentMethod: payment?.method ?? "cash",
+          paymentStatus: payment?.status ?? "unpaid",
         };
         created = order;
         setOrders((prev) => [order, ...prev]);

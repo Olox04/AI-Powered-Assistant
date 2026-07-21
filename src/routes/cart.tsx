@@ -1,8 +1,10 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Minus, Plus, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
+import { Minus, Plus, Trash2, ShoppingBag, ArrowRight, Wallet, CreditCard, Building2, Smartphone } from "lucide-react";
 import { useCart } from "@/lib/cart-store";
+import type { PaymentMethod, PaymentStatus } from "@/lib/menu-data";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/cart")({
@@ -10,23 +12,31 @@ export const Route = createFileRoute("/cart")({
   component: CartPage,
 });
 
+const paymentOptions: { id: PaymentMethod; label: string; icon: typeof Wallet }[] = [
+  { id: "cash", label: "Cash", icon: Wallet },
+  { id: "card", label: "Card", icon: CreditCard },
+  { id: "eft", label: "EFT", icon: Building2 },
+  { id: "snapscan", label: "SnapScan", icon: Smartphone },
+];
+
 function CartPage() {
   const { items, updateQty, remove, total, clear, placeOrder } = useCart();
   const [customer, setCustomer] = useState("");
+  const [method, setMethod] = useState<PaymentMethod>("cash");
+  const [status, setStatus] = useState<PaymentStatus>("unpaid");
   const navigate = useNavigate();
 
   const serviceFee = items.length > 0 ? 12 : 0;
   const grand = total + serviceFee;
 
   const checkout = () => {
-    const order = placeOrder(customer);
+    const order = placeOrder(customer, { method, status });
     if (!order) {
       toast.error("Your cart is empty");
       return;
     }
     toast.success(`Order ${order.id} placed`);
     setCustomer("");
-    // Strip the leading "#" for the URL param
     navigate({ to: "/orders/$orderId", params: { orderId: order.id.replace(/^#/, "") } });
   };
 

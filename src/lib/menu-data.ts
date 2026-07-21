@@ -95,6 +95,9 @@ export type OrderStatusEvent = {
   at: number; // epoch ms
 };
 
+export type PaymentMethod = "cash" | "card" | "eft" | "snapscan";
+export type PaymentStatus = "paid" | "unpaid" | "refunded";
+
 export type Order = {
   id: string;
   customer: string;
@@ -108,6 +111,8 @@ export type Order = {
   serviceFee?: number;
   placedAt?: number;
   history?: OrderStatusEvent[];
+  paymentMethod?: PaymentMethod;
+  paymentStatus?: PaymentStatus;
 };
 
 export const recentOrders: Order[] = [
