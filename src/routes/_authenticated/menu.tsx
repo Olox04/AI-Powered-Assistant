@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart-store";
 
-export const Route = createFileRoute("/menu")({
+export const Route = createFileRoute("/_authenticated/menu")({
   head: () => ({ meta: [{ title: "Menu — Skhura's Eatery" }] }),
   component: MenuPage,
 });

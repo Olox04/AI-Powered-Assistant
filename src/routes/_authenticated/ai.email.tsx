@@ -10,7 +10,7 @@ import { generateEmail } from "@/lib/ai.functions";
 import { AiDisclaimer } from "@/components/ai-disclaimer";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/ai/email")({
+export const Route = createFileRoute("/_authenticated/ai/email")({
   head: () => ({ meta: [{ title: "Smart Email Generator — Skhura's" }] }),
   component: EmailPage,
 });

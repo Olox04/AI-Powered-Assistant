@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { AiDisclaimer } from "@/components/ai-disclaimer";
 
-export const Route = createFileRoute("/ai/chatbot")({
+export const Route = createFileRoute("/_authenticated/ai/chatbot")({
   head: () => ({ meta: [{ title: "AI Chatbot — Skhura's" }] }),
   component: ChatbotPage,
 });

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/orders/$orderId")({
+export const Route = createFileRoute("/_authenticated/orders/$orderId")({
   head: ({ params }) => ({
     meta: [
       { title: `Receipt #${params.orderId} — Skhura's Eatery` },
