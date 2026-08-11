@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AuthenticatedMenuRouteImport } from './routes/_authenticated/menu'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
@@ -19,55 +20,60 @@ import { Route as AuthenticatedAiResearchRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAiEmailRouteImport } from './routes/_authenticated/ai.email'
 import { Route as AuthenticatedAiChatbotRouteImport } from './routes/_authenticated/ai.chatbot'
 
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
   path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedMenuRoute = AuthenticatedMenuRouteImport.update({
-  id: '/_authenticated/menu',
+  id: '/menu',
   path: '/menu',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
-  id: '/_authenticated/dashboard',
+  id: '/dashboard',
   path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedCartRoute = AuthenticatedCartRouteImport.update({
-  id: '/_authenticated/cart',
+  id: '/cart',
   path: '/cart',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedOrdersIndexRoute =
   AuthenticatedOrdersIndexRouteImport.update({
-    id: '/_authenticated/orders/',
+    id: '/orders/',
     path: '/orders/',
-    getParentRoute: () => rootRouteImport,
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedOrdersOrderIdRoute =
   AuthenticatedOrdersOrderIdRouteImport.update({
-    id: '/_authenticated/orders/$orderId',
+    id: '/orders/$orderId',
     path: '/orders/$orderId',
-    getParentRoute: () => rootRouteImport,
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedAiResearchRoute = AuthenticatedAiResearchRouteImport.update({
-  id: '/_authenticated/ai/research',
+  id: '/ai/research',
   path: '/ai/research',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedAiEmailRoute = AuthenticatedAiEmailRouteImport.update({
-  id: '/_authenticated/ai/email',
+  id: '/ai/email',
   path: '/ai/email',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedAiChatbotRoute = AuthenticatedAiChatbotRouteImport.update({
-  id: '/_authenticated/ai/chatbot',
+  id: '/ai/chatbot',
   path: '/ai/chatbot',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof AuthenticatedRouteRouteWithChildren
   '/cart': typeof AuthenticatedCartRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/menu': typeof AuthenticatedMenuRoute
@@ -79,6 +85,7 @@ export interface FileRoutesByFullPath {
   '/orders/': typeof AuthenticatedOrdersIndexRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof AuthenticatedRouteRouteWithChildren
   '/cart': typeof AuthenticatedCartRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/menu': typeof AuthenticatedMenuRoute
@@ -91,6 +98,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/_authenticated/cart': typeof AuthenticatedCartRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/menu': typeof AuthenticatedMenuRoute
@@ -104,6 +112,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/cart'
     | '/dashboard'
     | '/menu'
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/orders/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/cart'
     | '/dashboard'
     | '/menu'
@@ -126,6 +136,7 @@ export interface FileRouteTypes {
     | '/orders'
   id:
     | '__root__'
+    | '/_authenticated'
     | '/_authenticated/cart'
     | '/_authenticated/dashboard'
     | '/_authenticated/menu'
@@ -138,19 +149,19 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  AuthenticatedCartRoute: typeof AuthenticatedCartRoute
-  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
-  AuthenticatedMenuRoute: typeof AuthenticatedMenuRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   ApiChatRoute: typeof ApiChatRoute
-  AuthenticatedAiChatbotRoute: typeof AuthenticatedAiChatbotRoute
-  AuthenticatedAiEmailRoute: typeof AuthenticatedAiEmailRoute
-  AuthenticatedAiResearchRoute: typeof AuthenticatedAiResearchRoute
-  AuthenticatedOrdersOrderIdRoute: typeof AuthenticatedOrdersOrderIdRoute
-  AuthenticatedOrdersIndexRoute: typeof AuthenticatedOrdersIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/chat': {
       id: '/api/chat'
       path: '/api/chat'
@@ -163,70 +174,88 @@ declare module '@tanstack/react-router' {
       path: '/menu'
       fullPath: '/menu'
       preLoaderRoute: typeof AuthenticatedMenuRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/cart': {
       id: '/_authenticated/cart'
       path: '/cart'
       fullPath: '/cart'
       preLoaderRoute: typeof AuthenticatedCartRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/orders/': {
       id: '/_authenticated/orders/'
       path: '/orders'
       fullPath: '/orders/'
       preLoaderRoute: typeof AuthenticatedOrdersIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/orders/$orderId': {
       id: '/_authenticated/orders/$orderId'
       path: '/orders/$orderId'
       fullPath: '/orders/$orderId'
       preLoaderRoute: typeof AuthenticatedOrdersOrderIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/ai/research': {
       id: '/_authenticated/ai/research'
       path: '/ai/research'
       fullPath: '/ai/research'
       preLoaderRoute: typeof AuthenticatedAiResearchRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/ai/email': {
       id: '/_authenticated/ai/email'
       path: '/ai/email'
       fullPath: '/ai/email'
       preLoaderRoute: typeof AuthenticatedAiEmailRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/ai/chatbot': {
       id: '/_authenticated/ai/chatbot'
       path: '/ai/chatbot'
       fullPath: '/ai/chatbot'
       preLoaderRoute: typeof AuthenticatedAiChatbotRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
   }
 }
 
-const rootRouteChildren: RootRouteChildren = {
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedCartRoute: typeof AuthenticatedCartRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedMenuRoute: typeof AuthenticatedMenuRoute
+  AuthenticatedAiChatbotRoute: typeof AuthenticatedAiChatbotRoute
+  AuthenticatedAiEmailRoute: typeof AuthenticatedAiEmailRoute
+  AuthenticatedAiResearchRoute: typeof AuthenticatedAiResearchRoute
+  AuthenticatedOrdersOrderIdRoute: typeof AuthenticatedOrdersOrderIdRoute
+  AuthenticatedOrdersIndexRoute: typeof AuthenticatedOrdersIndexRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCartRoute: AuthenticatedCartRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedMenuRoute: AuthenticatedMenuRoute,
-  ApiChatRoute: ApiChatRoute,
   AuthenticatedAiChatbotRoute: AuthenticatedAiChatbotRoute,
   AuthenticatedAiEmailRoute: AuthenticatedAiEmailRoute,
   AuthenticatedAiResearchRoute: AuthenticatedAiResearchRoute,
   AuthenticatedOrdersOrderIdRoute: AuthenticatedOrdersOrderIdRoute,
   AuthenticatedOrdersIndexRoute: AuthenticatedOrdersIndexRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  ApiChatRoute: ApiChatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
