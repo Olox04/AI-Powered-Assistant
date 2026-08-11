@@ -187,13 +187,17 @@ export function AppShell({ children }: { children: ReactNode }) {
             </Button>
             <div className="flex items-center gap-2 rounded-full border border-border bg-card px-1.5 py-1.5 pr-3">
               <div className="grid h-7 w-7 place-items-center rounded-full bg-primary text-xs font-black text-primary-foreground">
-                SE
+                {initials || "SE"}
               </div>
               <div className="hidden text-xs sm:block">
-                <div className="font-semibold leading-none">Skhura Admin</div>
-                <div className="text-muted-foreground">Owner</div>
+                <div className="max-w-[140px] truncate font-semibold leading-none">{displayName}</div>
+                <div className="text-muted-foreground">{isAdmin ? "Admin" : "Customer"}</div>
               </div>
             </div>
+            <Button variant="ghost" size="icon" className="rounded-full" onClick={handleSignOut} aria-label="Sign out">
+              <LogOut className="h-5 w-5" />
+            </Button>
+
           </div>
         </header>
 
