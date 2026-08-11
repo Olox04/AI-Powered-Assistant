@@ -40,11 +40,11 @@ const aiNav = [
 
 function NavContent({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const isActive = (to: string) => (to === "/" ? pathname === "/" : pathname.startsWith(to));
+  const isActive = (to: string) => pathname.startsWith(to);
 
   return (
     <div className="flex h-full flex-col gap-6 p-5">
-      <Link to="/" onClick={onNavigate} className="flex items-center gap-3">
+      <Link to="/dashboard" onClick={onNavigate} className="flex items-center gap-3">
         <img src={logo} alt="Skhura's Eatery" className="h-11 w-11 rounded-xl bg-white p-1 shadow-soft" />
         <div className="min-w-0">
           <div className="truncate text-base font-black tracking-tight text-sidebar-foreground">Skhura's Eatery</div>
