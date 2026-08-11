@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
+  head: () => ({ meta: [{ title: "Dashboard — Skhura's Eatery" }, { name: "description", content: "Live orders, revenue and kitchen overview for Skhura's Eatery." }] }),
   component: Dashboard,
 });
 
