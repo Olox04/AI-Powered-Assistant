@@ -9,24 +9,26 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as MenuRouteImport } from './routes/menu'
-import { Route as CartRouteImport } from './routes/cart'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as OrdersIndexRouteImport } from './routes/orders.index'
-import { Route as OrdersOrderIdRouteImport } from './routes/orders.$orderId'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
-import { Route as AiResearchRouteImport } from './routes/ai.research'
-import { Route as AiEmailRouteImport } from './routes/ai.email'
-import { Route as AiChatbotRouteImport } from './routes/ai.chatbot'
+import { Route as AuthenticatedMenuRouteImport } from './routes/_authenticated/menu'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedCartRouteImport } from './routes/_authenticated/cart'
+import { Route as AuthenticatedOrdersIndexRouteImport } from './routes/_authenticated/orders.index'
+import { Route as AuthenticatedOrdersOrderIdRouteImport } from './routes/_authenticated/orders.$orderId'
+import { Route as AuthenticatedAiResearchRouteImport } from './routes/_authenticated/ai.research'
+import { Route as AuthenticatedAiEmailRouteImport } from './routes/_authenticated/ai.email'
+import { Route as AuthenticatedAiChatbotRouteImport } from './routes/_authenticated/ai.chatbot'
 
-const MenuRoute = MenuRouteImport.update({
-  id: '/menu',
-  path: '/menu',
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CartRoute = CartRouteImport.update({
-  id: '/cart',
-  path: '/cart',
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -34,133 +36,159 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const OrdersIndexRoute = OrdersIndexRouteImport.update({
-  id: '/orders/',
-  path: '/orders/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OrdersOrderIdRoute = OrdersOrderIdRouteImport.update({
-  id: '/orders/$orderId',
-  path: '/orders/$orderId',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
   path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AiResearchRoute = AiResearchRouteImport.update({
+const AuthenticatedMenuRoute = AuthenticatedMenuRouteImport.update({
+  id: '/menu',
+  path: '/menu',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCartRoute = AuthenticatedCartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedOrdersIndexRoute =
+  AuthenticatedOrdersIndexRouteImport.update({
+    id: '/orders/',
+    path: '/orders/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedOrdersOrderIdRoute =
+  AuthenticatedOrdersOrderIdRouteImport.update({
+    id: '/orders/$orderId',
+    path: '/orders/$orderId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAiResearchRoute = AuthenticatedAiResearchRouteImport.update({
   id: '/ai/research',
   path: '/ai/research',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AiEmailRoute = AiEmailRouteImport.update({
+const AuthenticatedAiEmailRoute = AuthenticatedAiEmailRouteImport.update({
   id: '/ai/email',
   path: '/ai/email',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AiChatbotRoute = AiChatbotRouteImport.update({
+const AuthenticatedAiChatbotRoute = AuthenticatedAiChatbotRouteImport.update({
   id: '/ai/chatbot',
   path: '/ai/chatbot',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/cart': typeof CartRoute
-  '/menu': typeof MenuRoute
-  '/ai/chatbot': typeof AiChatbotRoute
-  '/ai/email': typeof AiEmailRoute
-  '/ai/research': typeof AiResearchRoute
+  '/auth': typeof AuthRoute
+  '/cart': typeof AuthenticatedCartRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/menu': typeof AuthenticatedMenuRoute
   '/api/chat': typeof ApiChatRoute
-  '/orders/$orderId': typeof OrdersOrderIdRoute
-  '/orders/': typeof OrdersIndexRoute
+  '/ai/chatbot': typeof AuthenticatedAiChatbotRoute
+  '/ai/email': typeof AuthenticatedAiEmailRoute
+  '/ai/research': typeof AuthenticatedAiResearchRoute
+  '/orders/$orderId': typeof AuthenticatedOrdersOrderIdRoute
+  '/orders/': typeof AuthenticatedOrdersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/cart': typeof CartRoute
-  '/menu': typeof MenuRoute
-  '/ai/chatbot': typeof AiChatbotRoute
-  '/ai/email': typeof AiEmailRoute
-  '/ai/research': typeof AiResearchRoute
+  '/auth': typeof AuthRoute
+  '/cart': typeof AuthenticatedCartRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/menu': typeof AuthenticatedMenuRoute
   '/api/chat': typeof ApiChatRoute
-  '/orders/$orderId': typeof OrdersOrderIdRoute
-  '/orders': typeof OrdersIndexRoute
+  '/ai/chatbot': typeof AuthenticatedAiChatbotRoute
+  '/ai/email': typeof AuthenticatedAiEmailRoute
+  '/ai/research': typeof AuthenticatedAiResearchRoute
+  '/orders/$orderId': typeof AuthenticatedOrdersOrderIdRoute
+  '/orders': typeof AuthenticatedOrdersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/cart': typeof CartRoute
-  '/menu': typeof MenuRoute
-  '/ai/chatbot': typeof AiChatbotRoute
-  '/ai/email': typeof AiEmailRoute
-  '/ai/research': typeof AiResearchRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/_authenticated/cart': typeof AuthenticatedCartRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/menu': typeof AuthenticatedMenuRoute
   '/api/chat': typeof ApiChatRoute
-  '/orders/$orderId': typeof OrdersOrderIdRoute
-  '/orders/': typeof OrdersIndexRoute
+  '/_authenticated/ai/chatbot': typeof AuthenticatedAiChatbotRoute
+  '/_authenticated/ai/email': typeof AuthenticatedAiEmailRoute
+  '/_authenticated/ai/research': typeof AuthenticatedAiResearchRoute
+  '/_authenticated/orders/$orderId': typeof AuthenticatedOrdersOrderIdRoute
+  '/_authenticated/orders/': typeof AuthenticatedOrdersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/cart'
+    | '/dashboard'
     | '/menu'
+    | '/api/chat'
     | '/ai/chatbot'
     | '/ai/email'
     | '/ai/research'
-    | '/api/chat'
     | '/orders/$orderId'
     | '/orders/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/cart'
+    | '/dashboard'
     | '/menu'
+    | '/api/chat'
     | '/ai/chatbot'
     | '/ai/email'
     | '/ai/research'
-    | '/api/chat'
     | '/orders/$orderId'
     | '/orders'
   id:
     | '__root__'
     | '/'
-    | '/cart'
-    | '/menu'
-    | '/ai/chatbot'
-    | '/ai/email'
-    | '/ai/research'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/cart'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/menu'
     | '/api/chat'
-    | '/orders/$orderId'
-    | '/orders/'
+    | '/_authenticated/ai/chatbot'
+    | '/_authenticated/ai/email'
+    | '/_authenticated/ai/research'
+    | '/_authenticated/orders/$orderId'
+    | '/_authenticated/orders/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  CartRoute: typeof CartRoute
-  MenuRoute: typeof MenuRoute
-  AiChatbotRoute: typeof AiChatbotRoute
-  AiEmailRoute: typeof AiEmailRoute
-  AiResearchRoute: typeof AiResearchRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
   ApiChatRoute: typeof ApiChatRoute
-  OrdersOrderIdRoute: typeof OrdersOrderIdRoute
-  OrdersIndexRoute: typeof OrdersIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/menu': {
-      id: '/menu'
-      path: '/menu'
-      fullPath: '/menu'
-      preLoaderRoute: typeof MenuRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/cart': {
-      id: '/cart'
-      path: '/cart'
-      fullPath: '/cart'
-      preLoaderRoute: typeof CartRouteImport
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -170,20 +198,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/orders/': {
-      id: '/orders/'
-      path: '/orders'
-      fullPath: '/orders/'
-      preLoaderRoute: typeof OrdersIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/orders/$orderId': {
-      id: '/orders/$orderId'
-      path: '/orders/$orderId'
-      fullPath: '/orders/$orderId'
-      preLoaderRoute: typeof OrdersOrderIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/api/chat': {
       id: '/api/chat'
       path: '/api/chat'
@@ -191,51 +205,96 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/ai/research': {
-      id: '/ai/research'
+    '/_authenticated/menu': {
+      id: '/_authenticated/menu'
+      path: '/menu'
+      fullPath: '/menu'
+      preLoaderRoute: typeof AuthenticatedMenuRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/cart': {
+      id: '/_authenticated/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof AuthenticatedCartRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/orders/': {
+      id: '/_authenticated/orders/'
+      path: '/orders'
+      fullPath: '/orders/'
+      preLoaderRoute: typeof AuthenticatedOrdersIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/orders/$orderId': {
+      id: '/_authenticated/orders/$orderId'
+      path: '/orders/$orderId'
+      fullPath: '/orders/$orderId'
+      preLoaderRoute: typeof AuthenticatedOrdersOrderIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/ai/research': {
+      id: '/_authenticated/ai/research'
       path: '/ai/research'
       fullPath: '/ai/research'
-      preLoaderRoute: typeof AiResearchRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedAiResearchRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/ai/email': {
-      id: '/ai/email'
+    '/_authenticated/ai/email': {
+      id: '/_authenticated/ai/email'
       path: '/ai/email'
       fullPath: '/ai/email'
-      preLoaderRoute: typeof AiEmailRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedAiEmailRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/ai/chatbot': {
-      id: '/ai/chatbot'
+    '/_authenticated/ai/chatbot': {
+      id: '/_authenticated/ai/chatbot'
       path: '/ai/chatbot'
       fullPath: '/ai/chatbot'
-      preLoaderRoute: typeof AiChatbotRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedAiChatbotRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedCartRoute: typeof AuthenticatedCartRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedMenuRoute: typeof AuthenticatedMenuRoute
+  AuthenticatedAiChatbotRoute: typeof AuthenticatedAiChatbotRoute
+  AuthenticatedAiEmailRoute: typeof AuthenticatedAiEmailRoute
+  AuthenticatedAiResearchRoute: typeof AuthenticatedAiResearchRoute
+  AuthenticatedOrdersOrderIdRoute: typeof AuthenticatedOrdersOrderIdRoute
+  AuthenticatedOrdersIndexRoute: typeof AuthenticatedOrdersIndexRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedCartRoute: AuthenticatedCartRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedMenuRoute: AuthenticatedMenuRoute,
+  AuthenticatedAiChatbotRoute: AuthenticatedAiChatbotRoute,
+  AuthenticatedAiEmailRoute: AuthenticatedAiEmailRoute,
+  AuthenticatedAiResearchRoute: AuthenticatedAiResearchRoute,
+  AuthenticatedOrdersOrderIdRoute: AuthenticatedOrdersOrderIdRoute,
+  AuthenticatedOrdersIndexRoute: AuthenticatedOrdersIndexRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  CartRoute: CartRoute,
-  MenuRoute: MenuRoute,
-  AiChatbotRoute: AiChatbotRoute,
-  AiEmailRoute: AiEmailRoute,
-  AiResearchRoute: AiResearchRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
   ApiChatRoute: ApiChatRoute,
-  OrdersOrderIdRoute: OrdersOrderIdRoute,
-  OrdersIndexRoute: OrdersIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

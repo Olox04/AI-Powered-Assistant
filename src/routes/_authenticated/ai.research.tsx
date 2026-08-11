@@ -10,7 +10,7 @@ import { generateResearch } from "@/lib/ai.functions";
 import { AiDisclaimer } from "@/components/ai-disclaimer";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/ai/research")({
+export const Route = createFileRoute("/_authenticated/ai/research")({
   head: () => ({ meta: [{ title: "AI Research Assistant — Skhura's" }] }),
   component: ResearchPage,
 });

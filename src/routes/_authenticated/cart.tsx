@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/cart")({
+export const Route = createFileRoute("/_authenticated/cart")({
   head: () => ({ meta: [{ title: "Cart — Skhura's Eatery" }] }),
   component: CartPage,
 });

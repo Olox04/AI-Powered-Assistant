@@ -1,4 +1,4 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard,
   UtensilsCrossed,
@@ -11,17 +11,21 @@ import {
   Bell,
   Search,
   ShoppingCart,
+  LogOut,
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import logo from "@/assets/logo.png";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useCart } from "@/lib/cart-store";
+import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/integrations/supabase/client";
 
 const mainNav = [
-  { to: "/", label: "Dashboard", icon: LayoutDashboard },
+  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/menu", label: "Menu", icon: UtensilsCrossed },
   { to: "/cart", label: "Cart", icon: ShoppingCart },
   { to: "/orders", label: "Orders", icon: Receipt },
@@ -33,13 +37,14 @@ const aiNav = [
   { to: "/ai/chatbot", label: "AI Chatbot", icon: MessagesSquare },
 ];
 
+
 function NavContent({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const isActive = (to: string) => (to === "/" ? pathname === "/" : pathname.startsWith(to));
+  const isActive = (to: string) => pathname.startsWith(to);
 
   return (
     <div className="flex h-full flex-col gap-6 p-5">
-      <Link to="/" onClick={onNavigate} className="flex items-center gap-3">
+      <Link to="/dashboard" onClick={onNavigate} className="flex items-center gap-3">
         <img src={logo} alt="Skhura's Eatery" className="h-11 w-11 rounded-xl bg-white p-1 shadow-soft" />
         <div className="min-w-0">
           <div className="truncate text-base font-black tracking-tight text-sidebar-foreground">Skhura's Eatery</div>
@@ -114,6 +119,25 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
 export function AppShell({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const { count } = useCart();
+  const { user, profile, isAdmin } = useAuth();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const displayName = profile?.full_name || user?.email || "Guest";
+  const initials = displayName
+    .split(" ")
+    .map((p) => p[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
+  async function handleSignOut() {
+    await queryClient.cancelQueries();
+    queryClient.clear();
+    await supabase.auth.signOut();
+    navigate({ to: "/auth", search: { mode: "login" }, replace: true });
+  }
+
 
   return (
     <div className="flex min-h-screen w-full bg-background">
@@ -163,13 +187,17 @@ export function AppShell({ children }: { children: ReactNode }) {
             </Button>
             <div className="flex items-center gap-2 rounded-full border border-border bg-card px-1.5 py-1.5 pr-3">
               <div className="grid h-7 w-7 place-items-center rounded-full bg-primary text-xs font-black text-primary-foreground">
-                SE
+                {initials || "SE"}
               </div>
               <div className="hidden text-xs sm:block">
-                <div className="font-semibold leading-none">Skhura Admin</div>
-                <div className="text-muted-foreground">Owner</div>
+                <div className="max-w-[140px] truncate font-semibold leading-none">{displayName}</div>
+                <div className="text-muted-foreground">{isAdmin ? "Admin" : "Customer"}</div>
               </div>
             </div>
+            <Button variant="ghost" size="icon" className="rounded-full" onClick={handleSignOut} aria-label="Sign out">
+              <LogOut className="h-5 w-5" />
+            </Button>
+
           </div>
         </header>
 
