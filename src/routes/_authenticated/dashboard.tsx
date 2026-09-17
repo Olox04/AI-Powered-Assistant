@@ -44,11 +44,12 @@ function Dashboard() {
     if (!topSeller.qty || qty > Number(topSeller.qty)) topSeller = { name, qty: String(qty) };
   }
 
+  const hasOrders = orders.length > 0;
   const stats = [
-    { label: "Today's Orders", value: String(orders.length), trend: orders.length ? `${orders.length} today` : "No orders yet", icon: Receipt, color: "text-primary" },
-    { label: "Revenue", value: `R ${totalRevenue.toLocaleString("en-ZA")}`, trend: totalRevenue ? "From real orders" : "R0 so far", icon: DollarSign, color: "text-success" },
-    { label: "Customers", value: String(customerCount), trend: customerCount ? `${customerCount} served` : "No customers yet", icon: Users, color: "text-info" },
-    { label: "Top Seller", value: topSeller.name, trend: topSeller.qty ? `${topSeller.qty} sold` : "Waiting for first order", icon: Flame, color: "text-primary" },
+    { label: "Today's Orders", value: String(orders.length), trend: orders.length ? `${orders.length} today` : "No orders yet", icon: Receipt, color: "text-primary", live: hasOrders },
+    { label: "Revenue", value: `R ${totalRevenue.toLocaleString("en-ZA")}`, trend: totalRevenue ? "From real orders" : "R0 so far", icon: DollarSign, color: "text-success", live: hasOrders },
+    { label: "Customers", value: String(customerCount), trend: customerCount ? `${customerCount} served` : "No customers yet", icon: Users, color: "text-info", live: hasOrders },
+    { label: "Top Seller", value: topSeller.name, trend: topSeller.qty ? `${topSeller.qty} sold` : "Waiting for first order", icon: Flame, color: "text-primary", live: hasOrders },
   ];
 
   return (
@@ -80,8 +81,13 @@ function Dashboard() {
                 <div className={cn("grid h-10 w-10 place-items-center rounded-xl bg-muted", s.color)}>
                   <Icon className="h-5 w-5" />
                 </div>
-                <span className="inline-flex items-center gap-1 rounded-full bg-success/10 px-2 py-0.5 text-[10px] font-semibold text-success">
-                  <TrendingUp className="h-3 w-3" /> {s.trend}
+                <span
+                  className={cn(
+                    "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold",
+                    s.live ? "bg-success/10 text-success" : "bg-muted text-muted-foreground",
+                  )}
+                >
+                  {s.live ? <TrendingUp className="h-3 w-3" /> : null} {s.trend}
                 </span>
               </div>
               <div className="mt-4 truncate text-2xl font-black">{s.value}</div>
