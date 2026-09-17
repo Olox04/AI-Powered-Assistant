@@ -7,7 +7,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { recentOrders, type FoodItem, type Order, type PaymentMethod, type PaymentStatus } from "./menu-data";
+import type { FoodItem, Order, PaymentMethod, PaymentStatus } from "./menu-data";
 
 export type CartItem = {
   id: string;
@@ -34,7 +34,8 @@ type CartContextValue = {
 const CartContext = createContext<CartContextValue | null>(null);
 
 const CART_KEY = "skhura.cart.v1";
-const ORDERS_KEY = "skhura.orders.v1";
+// v2: drops the old seeded demo orders so stats genuinely start at zero
+const ORDERS_KEY = "skhura.orders.v2";
 
 const nextStatus: Record<Order["status"], Order["status"]> = {
   pending: "preparing",
@@ -45,7 +46,7 @@ const nextStatus: Record<Order["status"], Order["status"]> = {
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
-  const [orders, setOrders] = useState<Order[]>(recentOrders);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [hydrated, setHydrated] = useState(false);
 
   // Hydrate from localStorage after mount (SSR safe)

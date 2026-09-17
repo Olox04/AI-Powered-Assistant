@@ -7,9 +7,11 @@ import {
   Search,
   ArrowUpRight,
   Flame,
+  Inbox,
 } from "lucide-react";
 import heroBurger from "@/assets/hero-burger.jpg";
-import { categories, recentOrders } from "@/lib/menu-data";
+import { categories } from "@/lib/menu-data";
+import { useCart } from "@/lib/cart-store";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -17,13 +19,6 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — Skhura's Eatery" }, { name: "description", content: "Live orders, revenue and kitchen overview for Skhura's Eatery." }] }),
   component: Dashboard,
 });
-
-const stats = [
-  { label: "Today's Orders", value: "128", trend: "+12.5%", icon: Receipt, color: "text-primary" },
-  { label: "Revenue", value: "R 24,860", trend: "+8.2%", icon: DollarSign, color: "text-success" },
-  { label: "Customers", value: "412", trend: "+4.1%", icon: Users, color: "text-info" },
-  { label: "Top Seller", value: "Signature Burger", trend: "37 sold", icon: Flame, color: "text-primary" },
-];
 
 const statusStyles: Record<string, string> = {
   completed: "bg-success/15 text-success",
@@ -33,6 +28,30 @@ const statusStyles: Record<string, string> = {
 };
 
 function Dashboard() {
+  const { orders } = useCart();
+
+  const totalRevenue = orders.reduce((s, o) => s + o.total, 0);
+  const customerCount = new Set(orders.map((o) => o.customer.trim().toLowerCase())).size;
+
+  const soldCounts = new Map<string, number>();
+  for (const o of orders) {
+    for (const li of o.lineItems ?? []) {
+      soldCounts.set(li.name, (soldCounts.get(li.name) ?? 0) + li.qty);
+    }
+  }
+  let topSeller = { name: "No sales yet", qty: "" };
+  for (const [name, qty] of soldCounts) {
+    if (!topSeller.qty || qty > Number(topSeller.qty)) topSeller = { name, qty: String(qty) };
+  }
+
+  const hasOrders = orders.length > 0;
+  const stats = [
+    { label: "Today's Orders", value: String(orders.length), trend: orders.length ? `${orders.length} today` : "No orders yet", icon: Receipt, color: "text-primary", live: hasOrders },
+    { label: "Revenue", value: `R ${totalRevenue.toLocaleString("en-ZA")}`, trend: totalRevenue ? "From real orders" : "R0 so far", icon: DollarSign, color: "text-success", live: hasOrders },
+    { label: "Customers", value: String(customerCount), trend: customerCount ? `${customerCount} served` : "No customers yet", icon: Users, color: "text-info", live: hasOrders },
+    { label: "Top Seller", value: topSeller.name, trend: topSeller.qty ? `${topSeller.qty} sold` : "Waiting for first order", icon: Flame, color: "text-primary", live: hasOrders },
+  ];
+
   return (
     <div className="mx-auto max-w-[1400px] space-y-8 p-4 md:p-8">
       {/* Welcome banner */}
@@ -62,8 +81,13 @@ function Dashboard() {
                 <div className={cn("grid h-10 w-10 place-items-center rounded-xl bg-muted", s.color)}>
                   <Icon className="h-5 w-5" />
                 </div>
-                <span className="inline-flex items-center gap-1 rounded-full bg-success/10 px-2 py-0.5 text-[10px] font-semibold text-success">
-                  <TrendingUp className="h-3 w-3" /> {s.trend}
+                <span
+                  className={cn(
+                    "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold",
+                    s.live ? "bg-success/10 text-success" : "bg-muted text-muted-foreground",
+                  )}
+                >
+                  {s.live ? <TrendingUp className="h-3 w-3" /> : null} {s.trend}
                 </span>
               </div>
               <div className="mt-4 truncate text-2xl font-black">{s.value}</div>
@@ -172,28 +196,43 @@ function Dashboard() {
             View all →
           </Link>
         </div>
-        <div className="grid gap-3 md:grid-cols-2">
-          {recentOrders.slice(0, 6).map((o) => (
-            <div key={o.id} className="card-hover flex items-center justify-between gap-4 rounded-2xl border border-border bg-card p-4 shadow-soft">
-              <div className="min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className="font-bold">{o.customer}</span>
-                  <span className="text-xs text-muted-foreground">{o.id}</span>
-                </div>
-                <div className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
-                  {o.items.join(" · ")}
-                </div>
-                <div className="mt-1 text-xs text-muted-foreground">{o.time}</div>
-              </div>
-              <div className="flex shrink-0 flex-col items-end gap-2">
-                <span className="text-base font-black">R{o.total}</span>
-                <span className={cn("rounded-full px-2 py-0.5 text-[10px] font-bold uppercase", statusStyles[o.status])}>
-                  {o.status}
-                </span>
-              </div>
+        {orders.length === 0 ? (
+          <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border bg-card p-12 text-center shadow-soft">
+            <div className="grid h-12 w-12 place-items-center rounded-2xl bg-muted text-muted-foreground">
+              <Inbox className="h-6 w-6" />
             </div>
-          ))}
-        </div>
+            <div>
+              <div className="font-bold">No orders yet</div>
+              <div className="text-sm text-muted-foreground">New orders will appear here as soon as customers check out.</div>
+            </div>
+            <Link to="/menu" className="text-sm font-semibold text-primary hover:underline">
+              Open the menu →
+            </Link>
+          </div>
+        ) : (
+          <div className="grid gap-3 md:grid-cols-2">
+            {orders.slice(0, 6).map((o) => (
+              <div key={o.id} className="card-hover flex items-center justify-between gap-4 rounded-2xl border border-border bg-card p-4 shadow-soft">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold">{o.customer}</span>
+                    <span className="text-xs text-muted-foreground">{o.id}</span>
+                  </div>
+                  <div className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
+                    {o.items.join(" · ")}
+                  </div>
+                  <div className="mt-1 text-xs text-muted-foreground">{o.time}</div>
+                </div>
+                <div className="flex shrink-0 flex-col items-end gap-2">
+                  <span className="text-base font-black">R{o.total}</span>
+                  <span className={cn("rounded-full px-2 py-0.5 text-[10px] font-bold uppercase", statusStyles[o.status])}>
+                    {o.status}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );

@@ -108,13 +108,3 @@ export type Order = {
   paymentStatus?: PaymentStatus;
 };
 
-export const recentOrders: Order[] = [
-  { id: "#4821", customer: "Thabo M.", items: ["Signature Burger", "Large Chips", "Coke"], total: 149, status: "completed", time: "2m ago" },
-  { id: "#4820", customer: "Nolwazi K.", items: ["Family Combo"], total: 259, status: "preparing", time: "5m ago" },
-  { id: "#4819", customer: "Sipho D.", items: ["Loaded Chip Roll", "Fanta"], total: 72, status: "ready", time: "8m ago" },
-  { id: "#4818", customer: "Amanda P.", items: ["Fried Chicken 6pc", "Cheesy Chips"], total: 184, status: "pending", time: "12m ago" },
-  { id: "#4817", customer: "Lerato V.", items: ["Pork Chops", "Sprite"], total: 132, status: "completed", time: "15m ago" },
-  { id: "#4816", customer: "Kabelo N.", items: ["Double Russian Parcel"], total: 75, status: "preparing", time: "18m ago" },
-  { id: "#4815", customer: "Zanele B.", items: ["Skhura's Club", "Chips"], total: 110, status: "ready", time: "22m ago" },
-  { id: "#4814", customer: "Mpho L.", items: ["Amagwinya 3pk", "Loaded Amagwinya"], total: 70, status: "completed", time: "27m ago" },
-];
