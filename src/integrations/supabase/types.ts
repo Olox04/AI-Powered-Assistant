@@ -14,6 +14,92 @@ export type Database = {
   }
   public: {
     Tables: {
+      menu_categories: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          image_key: string
+          name: string
+          slug: string
+          sort_order: number
+          starting_price: number
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          id?: string
+          image_key?: string
+          name: string
+          slug: string
+          sort_order?: number
+          starting_price?: number
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          image_key?: string
+          name?: string
+          slug?: string
+          sort_order?: number
+          starting_price?: number
+          updated_at?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
+      menu_items: {
+        Row: {
+          available: boolean
+          category_slug: string
+          created_at: string
+          description: string
+          id: string
+          image_key: string
+          name: string
+          price: number
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          available?: boolean
+          category_slug: string
+          created_at?: string
+          description?: string
+          id?: string
+          image_key?: string
+          name: string
+          price?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          available?: boolean
+          category_slug?: string
+          created_at?: string
+          description?: string
+          id?: string
+          image_key?: string
+          name?: string
+          price?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "menu_items_category_slug_fkey"
+            columns: ["category_slug"]
+            isOneToOne: false
+            referencedRelation: "menu_categories"
+            referencedColumns: ["slug"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
@@ -35,6 +121,24 @@ export type Database = {
           id?: string
           phone?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value?: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: Json
         }
         Relationships: []
       }
