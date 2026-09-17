@@ -7,7 +7,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { recentOrders, type FoodItem, type Order, type PaymentMethod, type PaymentStatus } from "./menu-data";
+import type { FoodItem, Order, PaymentMethod, PaymentStatus } from "./menu-data";
 
 export type CartItem = {
   id: string;
@@ -45,7 +45,7 @@ const nextStatus: Record<Order["status"], Order["status"]> = {
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
-  const [orders, setOrders] = useState<Order[]>(recentOrders);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [hydrated, setHydrated] = useState(false);
 
   // Hydrate from localStorage after mount (SSR safe)
