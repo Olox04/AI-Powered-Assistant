@@ -7,9 +7,11 @@ import {
   Search,
   ArrowUpRight,
   Flame,
+  Inbox,
 } from "lucide-react";
 import heroBurger from "@/assets/hero-burger.jpg";
-import { categories, recentOrders } from "@/lib/menu-data";
+import { categories } from "@/lib/menu-data";
+import { useCart } from "@/lib/cart-store";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -17,13 +19,6 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — Skhura's Eatery" }, { name: "description", content: "Live orders, revenue and kitchen overview for Skhura's Eatery." }] }),
   component: Dashboard,
 });
-
-const stats = [
-  { label: "Today's Orders", value: "128", trend: "+12.5%", icon: Receipt, color: "text-primary" },
-  { label: "Revenue", value: "R 24,860", trend: "+8.2%", icon: DollarSign, color: "text-success" },
-  { label: "Customers", value: "412", trend: "+4.1%", icon: Users, color: "text-info" },
-  { label: "Top Seller", value: "Signature Burger", trend: "37 sold", icon: Flame, color: "text-primary" },
-];
 
 const statusStyles: Record<string, string> = {
   completed: "bg-success/15 text-success",
