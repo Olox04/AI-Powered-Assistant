@@ -28,6 +28,29 @@ const statusStyles: Record<string, string> = {
 };
 
 function Dashboard() {
+  const { orders } = useCart();
+
+  const totalRevenue = orders.reduce((s, o) => s + o.total, 0);
+  const customerCount = new Set(orders.map((o) => o.customer.trim().toLowerCase())).size;
+
+  const soldCounts = new Map<string, number>();
+  for (const o of orders) {
+    for (const li of o.lineItems ?? []) {
+      soldCounts.set(li.name, (soldCounts.get(li.name) ?? 0) + li.qty);
+    }
+  }
+  let topSeller = { name: "No sales yet", qty: "" };
+  for (const [name, qty] of soldCounts) {
+    if (!topSeller.qty || qty > Number(topSeller.qty)) topSeller = { name, qty: String(qty) };
+  }
+
+  const stats = [
+    { label: "Today's Orders", value: String(orders.length), trend: orders.length ? `${orders.length} today` : "No orders yet", icon: Receipt, color: "text-primary" },
+    { label: "Revenue", value: `R ${totalRevenue.toLocaleString("en-ZA")}`, trend: totalRevenue ? "From real orders" : "R0 so far", icon: DollarSign, color: "text-success" },
+    { label: "Customers", value: String(customerCount), trend: customerCount ? `${customerCount} served` : "No customers yet", icon: Users, color: "text-info" },
+    { label: "Top Seller", value: topSeller.name, trend: topSeller.qty ? `${topSeller.qty} sold` : "Waiting for first order", icon: Flame, color: "text-primary" },
+  ];
+
   return (
     <div className="mx-auto max-w-[1400px] space-y-8 p-4 md:p-8">
       {/* Welcome banner */}
