@@ -34,7 +34,8 @@ type CartContextValue = {
 const CartContext = createContext<CartContextValue | null>(null);
 
 const CART_KEY = "skhura.cart.v1";
-const ORDERS_KEY = "skhura.orders.v1";
+// v2: drops the old seeded demo orders so stats genuinely start at zero
+const ORDERS_KEY = "skhura.orders.v2";
 
 const nextStatus: Record<Order["status"], Order["status"]> = {
   pending: "preparing",
