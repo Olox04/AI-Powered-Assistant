@@ -190,28 +190,43 @@ function Dashboard() {
             View all →
           </Link>
         </div>
-        <div className="grid gap-3 md:grid-cols-2">
-          {recentOrders.slice(0, 6).map((o) => (
-            <div key={o.id} className="card-hover flex items-center justify-between gap-4 rounded-2xl border border-border bg-card p-4 shadow-soft">
-              <div className="min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className="font-bold">{o.customer}</span>
-                  <span className="text-xs text-muted-foreground">{o.id}</span>
-                </div>
-                <div className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
-                  {o.items.join(" · ")}
-                </div>
-                <div className="mt-1 text-xs text-muted-foreground">{o.time}</div>
-              </div>
-              <div className="flex shrink-0 flex-col items-end gap-2">
-                <span className="text-base font-black">R{o.total}</span>
-                <span className={cn("rounded-full px-2 py-0.5 text-[10px] font-bold uppercase", statusStyles[o.status])}>
-                  {o.status}
-                </span>
-              </div>
+        {orders.length === 0 ? (
+          <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border bg-card p-12 text-center shadow-soft">
+            <div className="grid h-12 w-12 place-items-center rounded-2xl bg-muted text-muted-foreground">
+              <Inbox className="h-6 w-6" />
             </div>
-          ))}
-        </div>
+            <div>
+              <div className="font-bold">No orders yet</div>
+              <div className="text-sm text-muted-foreground">New orders will appear here as soon as customers check out.</div>
+            </div>
+            <Link to="/menu" className="text-sm font-semibold text-primary hover:underline">
+              Open the menu →
+            </Link>
+          </div>
+        ) : (
+          <div className="grid gap-3 md:grid-cols-2">
+            {orders.slice(0, 6).map((o) => (
+              <div key={o.id} className="card-hover flex items-center justify-between gap-4 rounded-2xl border border-border bg-card p-4 shadow-soft">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold">{o.customer}</span>
+                    <span className="text-xs text-muted-foreground">{o.id}</span>
+                  </div>
+                  <div className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
+                    {o.items.join(" · ")}
+                  </div>
+                  <div className="mt-1 text-xs text-muted-foreground">{o.time}</div>
+                </div>
+                <div className="flex shrink-0 flex-col items-end gap-2">
+                  <span className="text-base font-black">R{o.total}</span>
+                  <span className={cn("rounded-full px-2 py-0.5 text-[10px] font-bold uppercase", statusStyles[o.status])}>
+                    {o.status}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );
