@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Search, Heart, Plus, SlidersHorizontal } from "lucide-react";
-import { categories, foods } from "@/lib/menu-data";
+import { useMenu } from "@/hooks/use-menu";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -19,6 +19,7 @@ function MenuPage() {
   const [favs, setFavs] = useState<Set<string>>(new Set());
   const [onlyAvailable, setOnlyAvailable] = useState(false);
   const { add } = useCart();
+  const { categories, foods, loading } = useMenu();
 
   const filtered = useMemo(() => {
     return foods.filter((f) => {
@@ -27,7 +28,7 @@ function MenuPage() {
       if (query && !f.name.toLowerCase().includes(query.toLowerCase())) return false;
       return true;
     });
-  }, [active, query, onlyAvailable]);
+  }, [foods, active, query, onlyAvailable]);
 
   const toggleFav = (id: string) => {
     setFavs((prev) => {
@@ -103,7 +104,7 @@ function MenuPage() {
           {/* Grid */}
           {filtered.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-border p-10 text-center text-sm text-muted-foreground">
-              No dishes match your filters.
+              {loading ? "Loading the menu…" : "No dishes match your filters."}
             </div>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
