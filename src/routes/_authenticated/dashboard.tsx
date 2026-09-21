@@ -9,8 +9,8 @@ import {
   Flame,
   Inbox,
 } from "lucide-react";
-import heroBurger from "@/assets/hero-burger.jpg";
-import { categories } from "@/lib/menu-data";
+import { useMenu } from "@/hooks/use-menu";
+import { resolveImage } from "@/lib/menu-images";
 import { useCart } from "@/lib/cart-store";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -29,6 +29,7 @@ const statusStyles: Record<string, string> = {
 
 function Dashboard() {
   const { orders } = useCart();
+  const { categories, promo } = useMenu();
 
   const totalRevenue = orders.reduce((s, o) => s + o.total, 0);
   const customerCount = new Set(orders.map((o) => o.customer.trim().toLowerCase())).size;
