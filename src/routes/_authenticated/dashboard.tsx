@@ -9,8 +9,8 @@ import {
   Flame,
   Inbox,
 } from "lucide-react";
-import heroBurger from "@/assets/hero-burger.jpg";
-import { categories } from "@/lib/menu-data";
+import { useMenu } from "@/hooks/use-menu";
+import { resolveImage } from "@/lib/menu-images";
 import { useCart } from "@/lib/cart-store";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -29,6 +29,7 @@ const statusStyles: Record<string, string> = {
 
 function Dashboard() {
   const { orders } = useCart();
+  const { categories, promo } = useMenu();
 
   const totalRevenue = orders.reduce((s, o) => s + o.total, 0);
   const customerCount = new Set(orders.map((o) => o.customer.trim().toLowerCase())).size;
@@ -153,23 +154,24 @@ function Dashboard() {
       </section>
 
       {/* Featured promo */}
+      {promo.enabled && (
       <section className="relative overflow-hidden rounded-3xl bg-secondary text-white shadow-soft">
         <div className="grid gap-6 md:grid-cols-2">
           <div className="flex flex-col justify-center gap-4 p-8 md:p-12">
             <span className="inline-flex w-fit items-center gap-2 rounded-full bg-primary/20 px-3 py-1 text-xs font-bold uppercase tracking-widest text-primary">
-              <Flame className="h-3 w-3" /> Featured
+              <Flame className="h-3 w-3" /> {promo.eyebrow}
             </span>
             <h2 className="text-4xl font-black leading-[1.05] md:text-5xl">
-              Bold Flavours. <br />
-              <span className="text-primary">Timeless Classics.</span>
+              {promo.title} <br />
+              <span className="text-primary">{promo.titleAccent}</span>
             </h2>
-            <p className="max-w-md text-sm text-white/70">
-              Try the Skhura's Signature Burger — double-stacked, house sauce, brioche bun. Fresh off the grill.
-            </p>
+            <p className="max-w-md text-sm text-white/70">{promo.body}</p>
             <div className="flex flex-wrap gap-3">
-              <Button size="lg" className="rounded-full shadow-glow">
-                Order Now <ArrowUpRight className="ml-1 h-4 w-4" />
-              </Button>
+              <Link to="/menu">
+                <Button size="lg" className="rounded-full shadow-glow">
+                  {promo.ctaLabel} <ArrowUpRight className="ml-1 h-4 w-4" />
+                </Button>
+              </Link>
               <Link to="/menu" className="inline-flex items-center rounded-full border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur hover:bg-white/10">
                 Browse Menu
               </Link>
@@ -178,8 +180,8 @@ function Dashboard() {
           <div className="relative min-h-[280px] md:min-h-[400px]">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent,var(--color-secondary))]" />
             <img
-              src={heroBurger}
-              alt="Signature burger"
+              src={resolveImage(promo.imageKey)}
+              alt={promo.title}
               width={1600}
               height={900}
               className="h-full w-full object-cover"
@@ -187,6 +189,8 @@ function Dashboard() {
           </div>
         </div>
       </section>
+      )}
+
 
       {/* Recent orders */}
       <section>

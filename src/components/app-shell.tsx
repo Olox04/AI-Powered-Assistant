@@ -12,6 +12,7 @@ import {
   Search,
   ShoppingCart,
   LogOut,
+  Settings,
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
@@ -41,6 +42,7 @@ const aiNav = [
 function NavContent({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isActive = (to: string) => pathname.startsWith(to);
+  const { isAdmin } = useAuth();
 
   return (
     <div className="flex h-full flex-col gap-6 p-5">
@@ -76,6 +78,21 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
             </Link>
           );
         })}
+        {isAdmin && (
+          <Link
+            to="/admin"
+            onClick={onNavigate}
+            className={cn(
+              "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all",
+              isActive("/admin")
+                ? "bg-primary text-primary-foreground shadow-glow"
+                : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground",
+            )}
+          >
+            <Settings className="h-4 w-4 shrink-0" />
+            <span className="truncate">Admin Panel</span>
+          </Link>
+        )}
       </nav>
 
       <nav className="flex flex-col gap-1">
