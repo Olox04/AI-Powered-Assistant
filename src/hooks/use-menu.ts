@@ -93,7 +93,7 @@ export function useMenu() {
       slug: c.slug,
       name: c.name,
       description: c.description,
-      startingPrice: c.startingPrice ?? c.starting_price,
+      startingPrice: c.starting_price,
       image: resolveImage(c.image_key),
     }));
 
