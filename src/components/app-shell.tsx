@@ -41,6 +41,7 @@ const aiNav = [
 function NavContent({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isActive = (to: string) => pathname.startsWith(to);
+  const { isAdmin } = useAuth();
 
   return (
     <div className="flex h-full flex-col gap-6 p-5">
